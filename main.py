@@ -46,7 +46,8 @@ class GUI_Layout:
         
     def initialize_introductions(self):
         intro = "Hello, and welcome to a test of speed!\n To begin, choose your difficulty and press the start button!"
-        instructions = tk.Label(self.master, text=intro, fg="red", bg="gray")
+        intro_2 = "Simply choose a difficulty, click on the entry bar, and press start.\n Good Luck!!"
+        instructions = tk.Label(self.master, text=intro + intro_2, fg="red", bg="gray")
         instructions.config(anchor="center")
         instructions.pack()
         self.spacer1.pack()

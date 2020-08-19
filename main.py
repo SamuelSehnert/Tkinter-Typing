@@ -1,8 +1,8 @@
 import time, scrape_utils
-from tkinter_utils import GUI_Layout
+from tkinter_utils_V2 import GUI_Layout
 
 def main():
-    game = GUI_Layout
+    game = GUI_Layout()
 
     
 

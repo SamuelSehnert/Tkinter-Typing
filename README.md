@@ -6,5 +6,5 @@ TODO:
    [ ] Minor bug fixes   
 
 Completed:  
-   [X] Make program functional (not perfect)  
+   [X] Make program functional (not perfect yet)  
    [X] Seperate code into multiple files for readability  

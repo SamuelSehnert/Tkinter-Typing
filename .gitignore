@@ -1,2 +1,4 @@
 __pycache__/
 tkinter_utils.py
+.vscode/
+_venv_/

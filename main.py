@@ -1,7 +1,9 @@
-import time, scrape_utils, tkinter_utils
+import time, scrape_utils
+from tkinter_utils import GUI_Layout
 
 def main():
-    pass
+    game = GUI_Layout
+
     
 
 

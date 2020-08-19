@@ -1,6 +1,5 @@
 import tkinter as tk
 import scrape_utils
-import time
 
 root = tk.Tk()
 root.title("Speed Test!")
@@ -15,32 +14,44 @@ class GUI_Layout:
         self.master = master
         master.bind("<Return>", self.push_final) # binds the return button to return whatever is in the entry bar
 
-        spacer1 = tk.Label(master, text="   ") 
-        spacer2 = tk.Label(master, text="   ") 
-        spacer3 = tk.Label(master, text="\n \n \n \n") 
-        self.spacer4 = tk.Label(master, text="\n \n \n \n") 
+        self.countdown_label = tk.Label(master)
+        self.count = 3
 
-        self.initialize_introductions(master, spacer1)
+        self.difficulty = tk.Listbox()
+        self.game_difficulty = None
+
+        self.spacer1 = tk.Label(master, text="   ") 
+        spacer2 = tk.Label(master, text="   ") 
+        self.spacer3v1 = tk.Label(master, text="\n\n")
+        self.spacer3 = tk.Label(master, text="\n") 
+        self.spacer4 = tk.Label(master, text=" \n") 
+
+        self.initialize_introductions()
         self.initialize_difficulties(master, spacer2)
 
-        self.startButton = tk.Button(master, text="START", command=self.clicker)
+        self.startButton = tk.Button(master, text="START", command=self.click_countdown) #clicker begins the game
         self.startButton.pack()
-        spacer3.pack() 
+        self.spacer3.pack() 
 
         
-    def initialize_introductions(self, master, spacer):
+    def initialize_introductions(self):
         intro = "Hello, and welcome to a test of speed!\n To begin, choose your difficulty and press the start button!"
-        instructions = tk.Label(master, text=intro, fg="red")
+        instructions = tk.Label(self.master, text=intro, fg="red")
         instructions.config(anchor="center")
         instructions.pack()
-        spacer.pack()
+        self.spacer1.pack()
     
     def initialize_difficulties(self, master, spacer):
+        """
+        (0,) = Easy
+        (1,) = Medium
+        (2,) = Hard
+        """
         difficulty_choices = ["EASY", "MEDIUM", "HARD"]
-        difficulty = tk.Listbox(master, height=3)
+        self.difficulty = tk.Listbox(master, height=3)
         for i in difficulty_choices:
-            difficulty.insert(tk.END, i)
-        difficulty.pack()
+            self.difficulty.insert(tk.END, i)
+        self.difficulty.pack()
         spacer.pack()
 
     def initialize_sentence(self, master, spacer):
@@ -49,34 +60,29 @@ class GUI_Layout:
         sentence_label.pack()
         spacer.pack()
 
+    def click_countdown(self):
+        self.game_difficulty = self.difficulty.curselection()
+        self.countdown_label.pack()
+        self.spacer3v1.pack()
+        self.countdown(self.count)
+
     def clicker(self):
-        three = tk.Label(self.master, text="3", fg="green")
-        three.pack()
-        time.sleep(1)
-        three.pack_forget()
-
-        two = tk.Label(self.master, text="2", fg="yellow")
-        two.pack()
-        time.sleep(1)
-        two.pack_forget()
-
-        one = tk.Label(self.master, text="1", fg="red")
-        one.pack()
-        time.sleep(1)
-        one.pack_forget()
-
         self.initialize_sentence(self.master, self.spacer4)
         
         self.entry_bar = tk.Entry(self.master)
         self.entry_bar.pack()
 
-
     def push_final(self, event): # used for when enter is pressed, returns what is in the entry bar
         submission = self.entry_bar.get()
         print(submission)
-        if len(submission) > 3:
-            print("nice!!!!")
 
+    def countdown(self, count): # for the after-button timer
+        self.countdown_label['text'] = count
+        if count > 0:
+            self.master.after(1000, self.countdown, count - 1)
+        elif count <= 0:
+            self.countdown_label['text'] = "GO!"
+            self.clicker()
 
 g = GUI_Layout(root)
 root.mainloop()

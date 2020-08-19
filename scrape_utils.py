@@ -1,24 +1,23 @@
 import requests, lxml
 from bs4 import BeautifulSoup
 
-def push_final_sentence():
-    return "the quick brown fox jumped over the lazy dog"
-
-def parse_difficulty_for_int(difficulty_tuple):
-    return difficulty_tuple[0]
-
-def scrape_site(url="https://randomwordgenerator.com/sentence.php"):
+    
+def scrape_site(url="https://www.randomwordgenerator.org/random-sentence-generator"):
     website = requests.get(url)
     website.raise_for_status() #simple crash check
-    soup = BeautifulSoup(website.content, "html.parser")
+    soup = BeautifulSoup(website.text, "lxml")
 
-    sentence = soup.find(id="result")
-
-    final = sentence.find_all("span", class_ = "support-sentence")
-
-    print(final)
+    final = soup.select("body > div.container.container-1.index > div > div.row.no-margin.for-up > div.col-md-6.col-sm-6.col-xs-12.show-content > ul > li > p.result > b")
+    final = str(final[0])
+    final = final[3:len(final) - 4]
 
 
-scrape_site()
+    return final
 
-##result > li > div > span
+def scrape_sentences(level):
+    sentences = []
+    for difficulty in range(level + 1):
+        sentences.append(scrape_site())
+
+    return " ".join(sentences)
+

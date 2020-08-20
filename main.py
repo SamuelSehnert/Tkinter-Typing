@@ -167,7 +167,6 @@ def calculate_score(input_string, sentence):
     return str(round((score / max_score) * 100, 2)) + "%"
 
 
-
 def main(): 
     root = tk.Tk()
     root.title("Speed Test!")

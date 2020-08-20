@@ -11,13 +11,16 @@ def scrape_site(url="https://www.randomwordgenerator.org/random-sentence-generat
     final = str(final[0])
     final = final[3:len(final) - 4]
 
-
     return final
 
 def scrape_sentences(level):
     sentences = []
-    for difficulty in range(level + 1):
-        sentences.append(scrape_site())
+    while len(sentences) < level + 1:
+        sentence = scrape_site()
+        if len(sentence) < 40:
+            sentences.append(sentence)
 
     return " ".join(sentences)
+
+
 

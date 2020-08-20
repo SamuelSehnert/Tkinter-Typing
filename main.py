@@ -3,73 +3,64 @@ import scrape_utils
 import time
 
 
-
-class GUI_Layout:
+class Game_Screen:
     def __init__(self, master):
-        frame1 = tk.Frame(master)
-        frame1.pack()
 
         self.master = master
-        self.master_finish = None
-        master.bind("<Return>", self.push_final) # binds the return button to return whatever is in the entry bar
+        self.master_endgame = None # Will be used to initialize the win screen
+        master.bind("<Return>", self.push_final) 
 
-        self.countdown_label = tk.Label(master)
-        self.count = 3
+        self.countdown_label = tk.Label(master, font=("Courier", 20))
+        self.count = 3 # Countdown after start has been pressed
 
-        self.difficulty = tk.Listbox()
         self.game_difficulty = None
 
-        # These two variables will be initalized as time.time() later in the code
-        self.start = 0
-        self.end = 0
+        self.first_click = True # User isn't allowed to click start twice
 
-        self.first_click = True
-        self.sentence = ''
-
-        self.spacer1 = tk.Label(master, text="   ") 
-        spacer2 = tk.Label(master, text="   ") 
+        self.spacer1 = tk.Label(master) 
+        self.spacer2 = tk.Label(master) 
         self.spacer3v1 = tk.Label(master, text="\n\n")
         self.spacer3 = tk.Label(master, text="\n") 
         self.spacer4 = tk.Label(master, text=" \n") 
 
         self.initialize_introductions()
-        self.initialize_difficulties(master, spacer2)
+        self.initialize_difficulties()
 
         self.entry_bar = tk.Entry(self.master, width=75)
         self.entry_bar.pack()
 
 
-        self.startButton = tk.Button(master, text="START", command=self.click_countdown) #clicker begins the game
+        self.startButton = tk.Button(self.master, 
+                                    text="START", 
+                                    command=self.click_countdown)
         self.startButton.pack()
         self.spacer3.pack() 
 
         
     def initialize_introductions(self):
-        intro = "Hello, and welcome to a test of speed!\n To begin, choose your difficulty and press the start button!"
-        intro_2 = "Simply choose a difficulty, click on the entry bar, and press start.\n Good Luck!!"
-        instructions = tk.Label(self.master, text=intro + intro_2, fg="red", bg="gray")
+        intro = "Hello, and welcome to a test of speed!\n To begin, choose your difficulty and press the start button!\n"
+        intro_2 = "Simply select a difficulty and press start.\nGood Luck!!"
+        instructions = tk.Label(self.master, 
+                                text=intro + intro_2, 
+                                fg="orange", 
+                                bg="blue", 
+                                font=("Courier", 20))
         instructions.config(anchor="center")
         instructions.pack()
         self.spacer1.pack()
     
-    def initialize_difficulties(self, master, spacer):
+    def initialize_difficulties(self):
         """
         (0,) = Easy
         (1,) = Medium
         (2,) = Hard
         """
         difficulty_choices = ["EASY", "MEDIUM", "HARD"]
-        self.difficulty = tk.Listbox(master, height=3)
+        self.difficulty = tk.Listbox(self.master, height=3)
         for i in difficulty_choices:
             self.difficulty.insert(tk.END, i)
         self.difficulty.pack()
-        spacer.pack()
-
-    def initialize_sentence(self, master, spacer):
-        self.sentence = scrape_utils.scrape_sentences(self.game_difficulty[0])
-        self.sentence_label = tk.Label(master, text=self.sentence, fg="blue")
-        self.sentence_label.pack()
-        spacer.pack()
+        self.spacer2.pack()
 
     def click_countdown(self):
         if self.first_click:
@@ -77,48 +68,66 @@ class GUI_Layout:
             self.game_difficulty = self.difficulty.curselection()
             if len(self.game_difficulty) == 0:
                 self.game_difficulty = (0,)
+            self.sentence = scrape_utils.scrape_sentences(self.game_difficulty[0])
             self.countdown_label.pack()
             self.spacer3v1.pack()
             self.countdown(self.count)
 
-    def push_final(self, event): # used for when enter is pressed, returns what is in the entry bar
-        if not self.first_click:
-            self.end = time.time()
-            submission = self.entry_bar.get()
-            
-            correctness = calculate_score(submission, self.sentence)
-            time_used = round(self.end - self.start, 2)
-
-            self.master_finish = tk.Tk()
-            self.master_finish.title("Congrats!")
-            self.master_finish.geometry("250x200")
-
-            congrats = Finish_Screen(self.master_finish, correctness, time_used)
-            self.master_finish.mainloop()
-
-    def countdown(self, count): # for the after-button timer
+    def countdown(self, count): 
         self.countdown_label['text'] = count
         if count > 0:
             self.master.after(1000, self.countdown, count - 1)
         elif count <= 0:
             self.countdown_label['text'] = "GO!"
             self.start = time.time()
-            self.initialize_sentence(self.master, self.spacer4)
+            self.display_random_sentences()
+
+
+    def display_random_sentences(self):
+        self.sentence_label = tk.Label(self.master, 
+                                       text=self.sentence, 
+                                       fg="blue", 
+                                       font=("Courier", 20), 
+                                       wraplength=1000)
+        self.sentence_label.pack()
+        self.spacer4.pack()
+
+
+    def push_final(self, event): # used for when enter is pressed, returns what is in the entry bar
+        if not self.first_click:
+            self.end = time.time()
+            submission = self.entry_bar.get()
+            
+            score = calculate_score(submission, self.sentence)
+            time_used = round(self.end - self.start, 2)
+
+            self.master_endgame = tk.Tk()
+            self.master_endgame.title("Congrats!")
+            self.master_endgame.geometry("250x200")
+
+            congrats = Finish_Screen(self.master_endgame, score, time_used)
+            self.master_endgame.mainloop()
+
+
 
 class Finish_Screen:
-    def __init__(self, master, correctness, time_used):
+    def __init__(self, master, score, time_used):
         self.master = master
-        self.correctness = correctness
+        self.score = score
         self.time_used = time_used
 
-        self.horray = tk.Label(master, text="CONGRATS!")
+        self.horray = tk.Label(self.master, text="CONGRATS!")
         self.horray.pack()
 
-        self.timer = tk.Label(master, text="You took " + str(self.time_used) + " seconds!", fg="blue")
+        self.timer = tk.Label(self.master,
+                              text="You took " + str(self.time_used) + " seconds!", 
+                              fg="blue")
         self.timer.pack()
 
-        self.score = tk.Label(master, text=self.correctness)
+        self.score = tk.Label(self.master, text=self.score)
         self.score.pack()
+
+
 
 def calculate_score(input_string, sentence):
     score = 0
@@ -135,11 +144,12 @@ def calculate_score(input_string, sentence):
     return str(round((score / max_score) * 100, 2)) + "%"
 
 
+
 def main(): 
     root = tk.Tk()
     root.title("Speed Test!")
-    root.geometry("1000x400")
-    g = GUI_Layout(root)
+    root.geometry("1000x600")
+    Game_Screen(root)
     root.mainloop()
 
 

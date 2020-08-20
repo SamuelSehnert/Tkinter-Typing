@@ -4,6 +4,8 @@ TODO:
    [ ] Refracter code  
    [ ] Clean GUI overall and make more readable  
    [ ] Minor bug fixes   
+   [ ] Make the scoring system fairer  
+   [ ] Shorten the CSS selector for web scraping
 
 Completed:  
    [X] Make program functional  

@@ -137,7 +137,6 @@ class Finish_Screen:
 def calculate_score(input_string, sentence):
     score = 0
     max_score = len(sentence)
-    missing_letter = False
     input_string = list(input_string)
     sentence = list(sentence)
 

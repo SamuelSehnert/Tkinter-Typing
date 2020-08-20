@@ -138,29 +138,36 @@ def calculate_score(input_string, sentence):
     score = 0
     max_score = len(sentence)
     missing_letter = False
+    input_string = list(input_string)
+    sentence = list(sentence)
+
 
     if len(input_string) < len(sentence):
-        input_string = list(input_string)
-        sentence = list(sentence)
-        for sentence_letter, input_letter in enumerate(input_string):
-            if sentence_letter > len(input_string) or input_string[sentence_letter] != input_letter:
-                input_string.insert(sentence_letter, "0")
-            elif input_string[sentence_letter] == input_letter:
+        for counter, letter in enumerate(sentence):
+            if counter >= len(input_string):
+                continue
+            elif input_string[counter] != letter:
+                input_string.insert(counter, "0")
+            else:
                 score += 1
-        return str(round((score / max_score) * 100, 2)) + "%"
+                
+    elif len(input_string) > len(sentence):
+        counter = 0
+        for letter in input_string:
+            if counter >= len(sentence):
+                score -= 1
+            elif sentence[counter] != letter:
+                del input_string[counter]
+            else:
+                score += 1
+            counter += 1
 
-    
-    else:
-        if len(input_string) > len(sentence):
-            score -= (len(input_string) - len(sentence))
-            input_string = input_string[:len(sentence)]
-
-
+    elif len(input_string) == len(sentence):
         for sentence_letter, input_letter in enumerate(input_string):
             if input_letter == sentence[sentence_letter]:
                 score += 1
 
-        return str(round((score / max_score) * 100, 2)) + "%"
+    return str(round((score / max_score) * 100, 2)) + "%"
 
 
 

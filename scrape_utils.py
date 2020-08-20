@@ -7,7 +7,7 @@ def scrape_site(url="https://www.randomwordgenerator.org/random-sentence-generat
     website.raise_for_status() #simple crash check
     soup = BeautifulSoup(website.text, "lxml")
 
-    final = soup.select("body > div.container.container-1.index > div > div.row.no-margin.for-up > div.col-md-6.col-sm-6.col-xs-12.show-content > ul > li > p.result > b")
+    final = soup.select("p.result > b")
     final = str(final[0])
     final = final[3:len(final) - 4]
 
@@ -21,6 +21,5 @@ def scrape_sentences(level):
             sentences.append(sentence)
 
     return " ".join(sentences)
-
 
 

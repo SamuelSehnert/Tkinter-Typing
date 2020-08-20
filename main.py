@@ -117,7 +117,7 @@ class Finish_Screen:
         self.time_used = time_used
 
         self.spacer1 = tk.Label(self.master)
-        self.spacer2 = tk.Label(self.master)
+        self.spacer2 = tk.Label(self.master, text="\n")
 
         self.horray = tk.Label(self.master, text="CONGRATS!")
         self.horray.pack()
@@ -129,7 +129,7 @@ class Finish_Screen:
         self.timer.pack()
         self.spacer2.pack()
 
-        self.score = tk.Label(self.master, text=self.score)
+        self.score = tk.Label(self.master, text=self.score, font=("Courier", 20))
         self.score.pack()
 
 
@@ -137,16 +137,30 @@ class Finish_Screen:
 def calculate_score(input_string, sentence):
     score = 0
     max_score = len(sentence)
+    missing_letter = False
 
-    if len(input_string) > len(sentence):
-        score -= len(input_string) - len(sentence)
-        input_string = input_string[:len(sentence)]
+    if len(input_string) < len(sentence):
+        input_string = list(input_string)
+        sentence = list(sentence)
+        for sentence_letter, input_letter in enumerate(input_string):
+            if sentence_letter > len(input_string) or input_string[sentence_letter] != input_letter:
+                input_string.insert(sentence_letter, "0")
+            elif input_string[sentence_letter] == input_letter:
+                score += 1
+        return str(round((score / max_score) * 100, 2)) + "%"
 
-    for sentence_letter, input_letter in enumerate(input_string):
-        if input_letter == sentence[sentence_letter]:
-            score += 1
+    
+    else:
+        if len(input_string) > len(sentence):
+            score -= (len(input_string) - len(sentence))
+            input_string = input_string[:len(sentence)]
 
-    return str(round((score / max_score) * 100, 2)) + "%"
+
+        for sentence_letter, input_letter in enumerate(input_string):
+            if input_letter == sentence[sentence_letter]:
+                score += 1
+
+        return str(round((score / max_score) * 100, 2)) + "%"
 
 
 

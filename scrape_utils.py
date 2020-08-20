@@ -11,8 +11,7 @@ def scrape_site(url="https://www.randomwordgenerator.org/random-sentence-generat
     final = str(final[0])
     final = final[3:len(final) - 4]
 
-    #return final
-    return "Hello!"
+    return final
 
 def scrape_sentences(level):
     sentences = []

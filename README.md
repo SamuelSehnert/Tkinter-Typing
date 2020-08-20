@@ -5,6 +5,7 @@ TODO:
    [ ] Minor bug fixes   
    [ ] Make the scoring system fairer  
    [ ] Shorten the CSS selector for web scraping
+   [ ] Words for minute
 
 Completed:  
    [X] Make program functional  

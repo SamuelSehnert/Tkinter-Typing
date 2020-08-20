@@ -116,13 +116,18 @@ class Finish_Screen:
         self.score = score
         self.time_used = time_used
 
+        self.spacer1 = tk.Label(self.master)
+        self.spacer2 = tk.Label(self.master)
+
         self.horray = tk.Label(self.master, text="CONGRATS!")
         self.horray.pack()
+        self.spacer1.pack()
 
         self.timer = tk.Label(self.master,
                               text="You took " + str(self.time_used) + " seconds!", 
                               fg="blue")
         self.timer.pack()
+        self.spacer2.pack()
 
         self.score = tk.Label(self.master, text=self.score)
         self.score.pack()

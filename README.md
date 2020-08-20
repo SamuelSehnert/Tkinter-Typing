@@ -4,11 +4,11 @@ TODO:
    [ ] Refracter code  
    [ ] Minor bug fixes   
    [ ] Make the scoring system fairer  
-   [ ] Shorten the CSS selector for web scraping  
    [ ] Words for minute  
 
 Completed:  
    [X] Make program functional  
    [X] Seperate code into multiple files for readability  
    [X] Clean GUI overall and make more readable  
-
+   [X] Shorten the CSS selector for web scraping   
+   

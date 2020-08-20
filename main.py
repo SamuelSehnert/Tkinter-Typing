@@ -152,15 +152,13 @@ def calculate_score(input_string, sentence):
                 score += 1
                 
     elif len(input_string) > len(sentence):
-        counter = 0
-        for letter in input_string:
+        for counter, letter in enumerate(input_string):
             if counter >= len(sentence):
                 score -= 1
             elif sentence[counter] != letter:
                 del input_string[counter]
             else:
                 score += 1
-            counter += 1
 
     elif len(input_string) == len(sentence):
         for sentence_letter, input_letter in enumerate(input_string):

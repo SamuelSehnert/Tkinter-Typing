@@ -38,8 +38,8 @@ class Game_Screen:
 
         
     def initialize_introductions(self):
-        intro = "Hello, and welcome to a test of speed!\n To begin, choose your difficulty and press the start button!\n"
-        intro_2 = "Simply select a difficulty and press start.\nGood Luck!!"
+        intro = "Hello, and welcome to a test of speed!\n To begin, choose your difficulty.\n"
+        intro_2 = "Then click the entry bar and press start.\n When you have finished the sentence, press the ENTER key\nGood Luck!!"
         instructions = tk.Label(self.master, 
                                 text=intro + intro_2, 
                                 fg="orange", 
@@ -140,29 +140,43 @@ def calculate_score(input_string, sentence):
     input_string = list(input_string)
     sentence = list(sentence)
 
+    run = True
+    starter = 0
+    while run:
+        score = 0
+        if len(input_string) < len(sentence):
+            go = True
+            while go:
+                for counter, letter in enumerate(sentence[starter:], starter):
+                    if counter == len(sentence) - 1:
+                        go = False
+                        break
+                    if counter >= len(input_string):
+                        input_string.insert(counter, "0")
+                        #continue
+                    elif input_string[counter] != letter:
+                        input_string.insert(counter, "0")
+                        go = False
+                        starter += 1
+                        break
+                    else:
+                        starter += 1
+                    
+        elif len(input_string) > len(sentence):
+            for counter, letter in enumerate(input_string):
+                if counter >= len(sentence):
+                    score -= 1
+                elif sentence[counter] != letter:
+                    del input_string[counter]
+                else:
+                    score += 1
+            run = False
 
-    if len(input_string) < len(sentence):
-        for counter, letter in enumerate(sentence):
-            if counter >= len(input_string):
-                continue
-            elif input_string[counter] != letter:
-                input_string.insert(counter, "0")
-            else:
-                score += 1
-                
-    elif len(input_string) > len(sentence):
-        for counter, letter in enumerate(input_string):
-            if counter >= len(sentence):
-                score -= 1
-            elif sentence[counter] != letter:
-                del input_string[counter]
-            else:
-                score += 1
-
-    elif len(input_string) == len(sentence):
-        for sentence_letter, input_letter in enumerate(input_string):
-            if input_letter == sentence[sentence_letter]:
-                score += 1
+        elif len(input_string) == len(sentence):
+            for sentence_letter, input_letter in enumerate(input_string):
+                if input_letter == sentence[sentence_letter]:
+                    score += 1
+            run = False
 
     return str(round((score / max_score) * 100, 2)) + "%"
 

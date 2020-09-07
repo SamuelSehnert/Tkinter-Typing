@@ -20,7 +20,7 @@ class TestList(unittest.TestCase):
     def test_03(self):
         self.assertEqual(calculate_score("hello!", "hello!"), "100.0%")
         self.assertEqual(calculate_score("My friend is nice?", "My friend is nice?"), "100.0%")
-        self.assertEqual(calculate_score("hello", "Always test programs!"), "0.0%")
+        self.assertEqual(calculate_score("hello", "Programs!"), "0.0%")
 
 if __name__ == "__main__":
     unittest.main()
